@@ -1,5 +1,5 @@
 """동작 방식 그림: 서버 ↔ 화면 사이 UDP 흐름.
-  python tools/make-flow.py docs/images/flow.png
+  python tools/make-flow.py docs/images/flow-dark.png
 """
 import sys
 from PIL import Image, ImageDraw, ImageFont

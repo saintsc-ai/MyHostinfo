@@ -22,7 +22,7 @@
 
 ## 동작 방식
 
-![동작 방식 — 서버가 UDP 4210으로 상태를 보내고, 화면이 UDP 4211로 "여기 있음"을 알리면 서버가 그 화면에 직접도 보냅니다](docs/images/flow.png)
+![동작 방식 — 서버가 UDP 4210으로 상태를 보내고, 화면이 UDP 4211로 "여기 있음"을 알리면 서버가 그 화면에 직접도 보냅니다](docs/images/flow-dark.png)
 
 - 서버 프로그램 [`server/hostinfo_serial.py`](server/hostinfo_serial.py)는 파이썬 3 표준 라이브러리만 씁니다. 리눅스에서는 Docker 컨테이너(`docker ps`·`docker stats`)와 Proxmox VM(`pvesh`), `nvidia-smi`가 있으면 GPU도 보냅니다.
 - 같은 LAN이면 브로드캐스트로 서로 찾습니다. Wi-Fi로 브로드캐스트가 넘어가지 않는 곳(기업용 무선 컨트롤러, AP 격리)에서는 화면 설정에 서버 주소를 적습니다.
