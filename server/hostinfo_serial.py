@@ -27,6 +27,11 @@ GPU 가 있으면(nvidia-smi) 'GPU 35% 58C 92W' 줄을 더한다.
 기업용 무선 컨트롤러·AP 격리처럼 유선 브로드캐스트를 Wi-Fi 로 넘기지 않는 곳이 있어,
 Wi-Fi 보드가 5초마다 'DISPLAY <id>'를 UDP 4211 로 알리면 그 주소로도 직접 보낸다(30초 안 들리면 뺌).
 """
+import sys
+
+if sys.version_info < (3, 7):   # f-string·subprocess.run(capture_output) 를 쓴다
+    sys.exit("hostinfo_serial.py 는 Python 3.7 이상이 필요합니다(지금 %d.%d)" % sys.version_info[:2])
+
 import argparse
 import glob
 import os
@@ -34,7 +39,6 @@ import re
 import shutil
 import socket
 import subprocess
-import sys
 import threading
 import time
 
@@ -398,13 +402,12 @@ class Lists:
         while True:
             lines = []
             for f in (docker_list, proxmox_list):
-                try:
+                try:   # 목록을 모으거나 줄로 만들다 실패해도 상태 줄은 계속
                     item = f()
-                except Exception as e:   # 목록이 실패해도 상태 줄은 계속
+                    if item:
+                        lines += list_lines(item)
+                except Exception as e:
                     print(f"{f.__name__} failed: {e}", flush=True)
-                    item = None
-                if item:
-                    lines += list_lines(item)
             with self.lock:
                 self.lines = lines
             time.sleep(15)
@@ -451,6 +454,42 @@ def build(prev):
 
 
 # --- 시리얼 ------------------------------------------------------------------
+_win_serials = {"at": 0.0, "map": {}}
+
+
+def win_usb_serials():
+    """Windows: {'COM7': 'USB 일련번호'}. SERIALCOMM 에는 포트 이름만 있어 PnP 레지스트리
+    (Enum/USB/VID_xxxx&PID_xxxx/<일련번호>, FriendlyName "… (COM7)")에서 찾는다. 느려서 5분 캐시."""
+    if time.time() - _win_serials["at"] < 300:
+        return _win_serials["map"]
+    import winreg
+    out = {}
+    try:
+        usb = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Enum\USB")
+    except OSError:
+        return out
+    for i in range(winreg.QueryInfoKey(usb)[0]):
+        try:
+            dev = winreg.OpenKey(usb, winreg.EnumKey(usb, i))   # VID_10C4&PID_EA60
+        except OSError:
+            continue
+        for j in range(winreg.QueryInfoKey(dev)[0]):
+            inst = winreg.EnumKey(dev, j)                       # 일련번호(칩에 없으면 Windows 가 만든 값)
+            try:
+                k = winreg.OpenKey(dev, inst)
+                friendly = winreg.QueryValueEx(k, "FriendlyName")[0]
+                winreg.CloseKey(k)
+            except OSError:
+                continue
+            m = re.search(r"\((COM\d+)\)", friendly)
+            if m:
+                out[m.group(1).upper()] = inst
+        winreg.CloseKey(dev)
+    winreg.CloseKey(usb)
+    _win_serials["at"], _win_serials["map"] = time.time(), out
+    return out
+
+
 def list_ports():
     """[(포트, 설명·일련번호 문자열)]."""
     if WIN:
@@ -462,6 +501,7 @@ def list_ports():
             k = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"HARDWARE\DEVICEMAP\SERIALCOMM")
         except OSError:
             return res
+        serials = win_usb_serials()
         i = 0
         while True:
             try:
@@ -470,6 +510,9 @@ def list_ports():
                 break
             i += 1
             desc = name + (" CP210x" if "silabser" in name.lower() else "")
+            serial = serials.get(str(port).upper(), "")   # find_port(--serial)가 설명에서 찾는다
+            if serial:
+                desc += " " + serial
             res.append((port, desc))
         winreg.CloseKey(k)
         return res
@@ -518,6 +561,7 @@ class Port:
                 raise OSError("SetCommState failed")
             k32.EscapeCommFunction(h, 6)   # CLRDTR
             k32.EscapeCommFunction(h, 4)   # CLRRTS
+            k32.PurgeComm(h, 0x000C)       # PURGE_TXCLEAR | PURGE_RXCLEAR: 전에 남은 것 버리기
         else:
             import termios
             self.fd = os.open(path, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
@@ -621,7 +665,14 @@ def main():
     port, cur, last_err = None, None, None
     tick = 0
     while True:
-        line, prev = build(prev)
+        try:
+            line, prev = build(prev)
+        except Exception as e:   # 상태를 한 번 못 읽어도(디스크·센서 등) 멈추지 않고 다음 차례에
+            if a.once:
+                raise
+            print(f"build failed: {e}", flush=True)
+            time.sleep(INTERVAL)
+            continue
         extra = lists.get() if lists and (tick % 3 == 0 or a.once) else []   # 목록은 9초마다
         if a.geo and (tick % 3 == 0 or a.once):
             extra.append("GEO " + a.geo.replace("|", "/"))
