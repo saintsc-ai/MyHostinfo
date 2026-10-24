@@ -1,0 +1,6 @@
+HOST proxmox|192.168.0.10|CPU 7% 42C 20c 40t|RAM 58.3/94G|DISK 23% /|VM 3/3 run|up 12d 4h|@2026-10-24 Sat 14:32
+LIST proxmox|1/1|Proxmox VM|3/3|V 3/3|gdocker~12%~31|gnas~3%~33|gwin11~1%~50
+HOST docker|192.168.0.11|CPU 12% 51C 16c 16t|RAM 9.8/31G|DISK 61% /|GPU 35% 58C 92W|up 3d 2h|@2026-10-24 Sat 14:32
+LIST docker|1/1|Docker|!1 6/7|!1 D 6/7|#photos|gml-worker~35%~22|gapi~2%~6|gworker~1%~4|#monitor|rgrafana~UNH~5|ystatus~3%~3|#etc|gportainer~0%~1
+WX Seoul|2026-10-24 Sat 14:32|0|Clear|16.2|57|11|21
+CLOCK 2026-10-24 Sat 23:58

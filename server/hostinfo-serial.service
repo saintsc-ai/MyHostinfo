@@ -1,0 +1,14 @@
+[Unit]
+Description=USB 로 꽂은 NodeMCU 화면에 이 컴퓨터 상태를 보냄 (hosts/hostinfo, 꽂혀 있을 때만)
+After=multi-user.target
+
+[Service]
+# 기본은 인자 없이 = CP210x(NodeMCU 화면 보드)를 3초마다 찾아, 꽂히면 보내고 빠지면 멈춘다.
+# 다른 보드·속도는 /etc/default/hostinfo-serial 에 HOSTINFO_ARGS="--serial ... --baud 921600"
+EnvironmentFile=-/etc/default/hostinfo-serial
+ExecStart=/usr/bin/python3 /usr/local/bin/hostinfo_serial.py $HOSTINFO_ARGS
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

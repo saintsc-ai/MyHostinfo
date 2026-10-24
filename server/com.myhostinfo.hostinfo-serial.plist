@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- 맥: 로그인하면 늘 돌며 NodeMCU 화면 보드가 꽂히면 이 맥 상태를 보낸다. install-mac.sh 가 경로를 채운다. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.myhostinfo.hostinfo-serial</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>__HOME__/bin/hostinfo_serial.py</string>
+    <string>--broadcast</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+  <key>StandardOutPath</key><string>__HOME__/Library/Logs/hostinfo-serial.log</string>
+  <key>StandardErrorPath</key><string>__HOME__/Library/Logs/hostinfo-serial.log</string>
+</dict>
+</plist>
