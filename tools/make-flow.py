@@ -6,8 +6,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 OUT = sys.argv[1]
 W, H = 1800, 980
-BG, INK, SUB, LINE = (250, 250, 247), (34, 38, 46), (110, 116, 128), (214, 216, 220)
-BLUE, GREEN, ORANGE, SKY = (37, 99, 235), (22, 163, 74), (234, 88, 12), (14, 116, 144)
+BG, INK, SUB, LINE, CARD = (10, 11, 14), (236, 239, 244), (150, 158, 172), (58, 63, 74), (26, 29, 36)   # 검은 바탕
+BLUE, GREEN, ORANGE, SKY = (96, 165, 250), (74, 222, 128), (251, 146, 60), (56, 189, 248)
 
 
 def font(size, bold=False):
@@ -27,7 +27,7 @@ F_T, F_H, F_B, F_S = font(46, True), font(32, True), font(27), font(23)
 
 
 def box(x, y, w, h, title, lines, accent):
-    d.rounded_rectangle([x, y, x + w, y + h], 22, fill=(255, 255, 255), outline=LINE, width=3)
+    d.rounded_rectangle([x, y, x + w, y + h], 22, fill=CARD, outline=LINE, width=3)
     d.rounded_rectangle([x, y, x + 12, y + h], 6, fill=accent)
     d.text((x + 36, y + 22), title, font=F_H, fill=INK)
     for i, t in enumerate(lines):
@@ -77,7 +77,7 @@ arrow(L, 650, Rr, GREEN, "③ 상태  UDP 4210 · 그 화면 주소로 직접", 
 
 # 아래: 인터넷(날씨·시계)
 IX, IY, IW, IH = 1260, 730, 470, 170
-d.rounded_rectangle([IX, IY, IX + IW, IY + IH], 22, fill=(255, 255, 255), outline=LINE, width=3)
+d.rounded_rectangle([IX, IY, IX + IW, IY + IH], 22, fill=CARD, outline=LINE, width=3)
 d.rounded_rectangle([IX, IY, IX + 12, IY + IH], 6, fill=SKY)
 d.text((IX + 36, IY + 20), "인터넷", font=F_H, fill=INK)
 d.text((IX + 36, IY + 74), "Open-Meteo 날씨(10분마다, 키 없음)", font=F_S, fill=SUB)
