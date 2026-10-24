@@ -17,6 +17,8 @@
 | 화면 | 1.54" 240×240 | 1.54"·1.69"·1.14"·2.0"·2.25" | 1.54"·1.69"·1.14"·2.0"·2.25" |
 | 설치 방법 | **[docs/smalltv.md](docs/smalltv.md)** | **[docs/esp32s3.md](docs/esp32s3.md)** | **[docs/nodemcu.md](docs/nodemcu.md)** |
 
+**화면 보드 없이 PC 창으로도** 볼 수 있습니다 → **[docs/desktop.md](docs/desktop.md)**(240×240 창, 화면 보드와 같은 그림, 파이썬만 있으면 됨).
+
 어느 경우든 상태를 보여 줄 컴퓨터마다 서버 프로그램을 설치합니다 → **[docs/server.md](docs/server.md)**(리눅스·Windows·맥).
 
 ![화면 모음](docs/images/smalltv-screens.png)
@@ -38,6 +40,7 @@
 | [`firmware/esp8266/`](firmware/esp8266/) | SmallTV(ESP8266) 펌웨어 소스. NodeMCU + 화면 모듈(`nodemcuv2`)도 빌드됩니다 |
 | [`firmware/esp32s3/`](firmware/esp32s3/) | ESP32-S3 펌웨어 소스 |
 | [`docs/`](docs/) | 설치 문서와 그림 |
+| [`desktop/`](desktop/) | PC 창 앱(`hostinfo_window.py`, 파이썬 tkinter) |
 | [`tools/`](tools/) | 펌웨어 빌드(`build-bin.sh`), 화면 미리보기 그림(`preview.py`, `make-hero.py`) |
 
 ## 소스로 빌드하기
