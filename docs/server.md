@@ -10,7 +10,7 @@ SmallTV·ESP32-S3·NodeMCU 화면에 상태를 보여 줄 컴퓨터마다 저장
 
 | 인자 | 뜻 |
 |---|---|
-| `--broadcast` | Wi-Fi 화면으로 보냅니다(USB로 꽂은 NodeMCU만 쓰면 없어도 됩니다). **꼭 넣습니다** |
+| `--broadcast` | Wi-Fi 화면으로 보냅니다. **Wi-Fi 화면(SmallTV·ESP32-S3, Wi-Fi로 쓰는 NodeMCU)이면 꼭 넣습니다.** USB로 꽂은 NodeMCU만 쓰면 없어도 됩니다 |
 | `--geo 위도,경도,이름` | 이 장소의 위치를 화면에 알려 날씨를 맞춥니다. 한 장소에 서버 한 대만 주면 됩니다. 예: `--geo 37.566,126.978,Seoul` |
 | `--no-usb` | USB 화면 보드를 찾지 않습니다. CP210x 칩을 쓰는 다른 USB 장치(Zigbee 동글 등)가 꽂혀 있으면 넣습니다 |
 | `--no-lists` | Docker·Proxmox 목록을 보내지 않습니다 |
