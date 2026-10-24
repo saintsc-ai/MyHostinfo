@@ -87,3 +87,14 @@ SmallTV·ESP32-S3·NodeMCU 화면에 상태를 보여 줄 컴퓨터마다 저장
 - **지우기**: `launchctl bootout gui/$(id -u)/com.myhostinfo.hostinfo-serial; rm ~/Library/LaunchAgents/com.myhostinfo.hostinfo-serial.plist`
 
 맥과 Windows는 Docker·VM 목록을 보내지 않고 서버 정보 화면만 보냅니다.
+
+## 화면 보드 없이 송출 확인하기
+
+화면 보드(SmallTV·ESP32-S3·NodeMCU)가 아직 없어도, 서버가 상태를 제대로 보내는지 확인할 수 있습니다.
+
+1. **보낼 내용만 보기**: 서버에서 `python3 hostinfo_serial.py --dry --once`를 실행합니다. 보낼 `HOST …`(와 리눅스는 `LIST …`) 줄이 화면에 찍힙니다. 아무것도 보내지는 않습니다.
+2. **실제로 받아 보기**: 같은 LAN의 PC(서버 자신이어도 됨)에서 **PC 창 앱** [`desktop/hostinfo_window.py`](../desktop/hostinfo_window.py)를 띄웁니다([desktop.md](desktop.md)).
+   - 창은 화면 보드와 같은 방법으로 받습니다. UDP 4210을 받고, 4211로 "여기 있음"을 보냅니다.
+   - 서버 이름·CPU·RAM 화면과 Docker·VM 목록이 차례로 나오면, 송출·방화벽·네트워크가 모두 맞는 것입니다.
+   - 서버 쪽 기록에는 `display <PC IP> window-<PC 이름>`이 찍힙니다.
+   - 날짜·시계·날씨만 나오면 서버 쪽 `--broadcast` 인자와 방화벽(UDP 4211), PC 쪽 방화벽(UDP 4210)을 확인합니다.

@@ -17,7 +17,7 @@
 | 화면 | 1.54" 240×240 | 1.54"·1.69"·1.14"·2.0"·2.25" | 1.54"·1.69"·1.14"·2.0"·2.25" |
 | 설치 방법 | **[docs/smalltv.md](docs/smalltv.md)** | **[docs/esp32s3.md](docs/esp32s3.md)** | **[docs/nodemcu.md](docs/nodemcu.md)** |
 
-**화면 보드 없이 PC 창으로도** 볼 수 있습니다 → **[docs/desktop.md](docs/desktop.md)**(240×240 창, 화면 보드와 같은 그림, 파이썬만 있으면 됨).
+**화면 보드 없이 PC 창으로도** 볼 수 있습니다 → **[docs/desktop.md](docs/desktop.md)**(240×240 창, 화면 보드와 같은 그림, 파이썬만 있으면 됨). **하드웨어가 없어도 서버가 정보를 제대로 보내는지 이 창으로 확인할 수 있습니다.**
 
 어느 경우든 상태를 보여 줄 컴퓨터마다 서버 프로그램을 설치합니다 → **[docs/server.md](docs/server.md)**(리눅스·Windows·맥).
 
