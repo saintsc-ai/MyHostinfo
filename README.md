@@ -6,17 +6,18 @@
 
 ![SmallTV 서버 모니터 — 서버 정보, Docker 목록, 날씨 화면](docs/images/smalltv-hero.png)
 
-## 두 가지 화면
+## 세 가지 화면
 
-| | GeekMagic SmallTV | ESP32-S3 + ST7789 화면 |
-|---|---|---|
-| 모습 | 흰 케이스에 든 완제품 날씨 시계 | 개발 보드에 화면 모듈을 점퍼선으로 연결 |
-| 설치 | 원래 펌웨어의 웹 업데이트로 Wi-Fi만으로 올림. 납땜·케이블 없음 | USB로 한 번 구움(브라우저로 가능) |
-| 설정 | 휴대폰으로 설정 페이지 | USB 시리얼 명령 |
-| 화면 | 1.54" 240×240 | 1.54"·1.69"·1.14"·2.0"·2.25" |
-| 설치 방법 | **[docs/smalltv.md](docs/smalltv.md)** | **[docs/esp32s3.md](docs/esp32s3.md)** |
+| | GeekMagic SmallTV | ESP32-S3 + ST7789 화면 | NodeMCU + ST7789 화면 |
+|---|---|---|---|
+| 모습 | 흰 케이스에 든 완제품 날씨 시계 | 개발 보드에 화면 모듈을 점퍼선으로 연결 | 개발 보드에 화면 모듈을 점퍼선으로 연결 |
+| 설치 | 원래 펌웨어의 웹 업데이트로 Wi-Fi만으로 올림. 납땜·케이블 없음 | USB로 한 번 구움(브라우저로 가능) | USB로 한 번 구움(브라우저로 가능) |
+| 설정 | 휴대폰으로 설정 페이지 | USB 시리얼 명령 | USB 시리얼 명령 |
+| 특징 | 가장 간단함 | Wi-Fi 화면 | **USB로 꽂으면 그 컴퓨터만** 보이는 USB 화면(Wi-Fi 설정 없이), Wi-Fi 화면도 됨 |
+| 화면 | 1.54" 240×240 | 1.54"·1.69"·1.14"·2.0"·2.25" | 1.54"·1.69"·1.14"·2.0"·2.25" |
+| 설치 방법 | **[docs/smalltv.md](docs/smalltv.md)** | **[docs/esp32s3.md](docs/esp32s3.md)** | **[docs/nodemcu.md](docs/nodemcu.md)** |
 
-두 경우 모두, 상태를 보여 줄 컴퓨터마다 서버 프로그램을 설치합니다 → **[docs/server.md](docs/server.md)**(리눅스·Windows·맥).
+어느 경우든 상태를 보여 줄 컴퓨터마다 서버 프로그램을 설치합니다 → **[docs/server.md](docs/server.md)**(리눅스·Windows·맥).
 
 ![화면 모음](docs/images/smalltv-screens.png)
 
@@ -32,7 +33,7 @@
 
 | 경로 | 내용 |
 |---|---|
-| [`bin/`](bin/) | 미리 빌드한 펌웨어(`SDP-hostinfo-smalltv.bin`, `esp32s3-hostinfo-full.bin`, `esp32s3-hostinfo-ota.bin`) |
+| [`bin/`](bin/) | 미리 빌드한 펌웨어(`SDP-hostinfo-smalltv.bin`, `esp32s3-hostinfo-full.bin`, `esp32s3-hostinfo-ota.bin`, `nodemcu-hostinfo.bin`) |
 | [`server/`](server/) | 서버 프로그램과 설치 스크립트(systemd·작업 스케줄러·launchd) |
 | [`firmware/esp8266/`](firmware/esp8266/) | SmallTV(ESP8266) 펌웨어 소스. NodeMCU + 화면 모듈(`nodemcuv2`)도 빌드됩니다 |
 | [`firmware/esp32s3/`](firmware/esp32s3/) | ESP32-S3 펌웨어 소스 |
@@ -44,7 +45,7 @@
 [PlatformIO](https://platformio.org/)가 필요합니다.
 
 ```sh
-cd firmware/esp8266 && pio run -e smalltv     # SmallTV
+cd firmware/esp8266 && pio run               # SmallTV(smalltv)·NodeMCU(nodemcuv2)
 cd firmware/esp32s3 && pio run                # ESP32-S3
 sh tools/build-bin.sh                         # 둘 다 빌드해 bin/ 에(esptool 필요)
 ```

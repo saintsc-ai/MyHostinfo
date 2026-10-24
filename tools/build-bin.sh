@@ -8,8 +8,9 @@ PIO=${PIO:-pio}
 PY=${PY:-python}
 mkdir -p bin
 
-(cd firmware/esp8266 && "$PIO" run -e smalltv)
+(cd firmware/esp8266 && "$PIO" run -e smalltv -e nodemcuv2)
 cp firmware/esp8266/.pio/build/smalltv/firmware.bin bin/SDP-hostinfo-smalltv.bin   # SmallTV 원래 펌웨어가 SDP 로 시작하는 이름만 받는다
+cp firmware/esp8266/.pio/build/nodemcuv2/firmware.bin bin/nodemcu-hostinfo.bin
 
 (cd firmware/esp32s3 && "$PIO" run)
 B=firmware/esp32s3/.pio/build/esp32s3
