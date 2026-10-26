@@ -71,6 +71,8 @@ SmallTV는 같은 겉모양이라도 **원래 펌웨어가 두 가지**입니다
 | 처음 화면 | 연결 안내 → `SD Pro V1.0.x` | `Manual Online` QR, `WiFi: GIFTV`, `http://192.168.4.1` |
 | 설정 화면 | WiFi Settings · City Settings · Photo · GIF | 위쪽 메뉴 Network · Weather · Time · Pictures · Settings |
 | 펌웨어 올리는 곳 | **Firmware Update (OTA)** = `/update_ota`(파일 이름이 `SDP`로 시작해야 함) | **Settings → 7. Firmware update** = `/update` |
+| 제조사 펌웨어 | [JUZIPi-tech/SD_PRO](https://github.com/JUZIPi-tech/SD_PRO) (`SDPro_V1.0.x_….bin`) | [GeekMagicClock/smalltv-ultra](https://github.com/GeekMagicClock/smalltv-ultra) (권장 [V9.0.50](https://github.com/GeekMagicClock/smalltv-ultra/tree/main/Ultra-V9.0.50), `FW-Smalltv-Ultra-V9.0.50.zip`) |
+| 제조사 설명서 | 상자 안 *Smart Clock Manual* | [안내 페이지](https://qr61.cn/onQs0U/qlPEzlA)(상자 QR) · [한국어 PDF](https://ncstatic.clewm.net/rsrc/2025/0430/12/57ce98fdda436e684ed70e7d067fee37.pdf) · [여러 언어](https://github.com/GeekMagicClock/smalltv-ultra/tree/main/User%20Manuals%20%5BMany%20Languages%5D) |
 
 ![SmallTV-Ultra 기판 — ESP-12F(ESP8266), 두 종류 모두 같은 칩](images/ultra/6-board-esp12f.jpg)
 
@@ -276,11 +278,10 @@ OTA 비밀번호를 잊었거나 펌웨어가 망가졌을 때만 씁니다. 필
 
 ## 원래 펌웨어로 되돌리기
 
-원래 펌웨어(SD Pro)는 제조사 쪽 GitHub [JUZIPi-tech/SD_PRO](https://github.com/JUZIPi-tech/SD_PRO)에 있습니다(`SDPro_V1.0.6_….bin`).
+어느 쪽이든 이 펌웨어가 돌고 있으면 **Wi-Fi(OTA)**로 되돌릴 수 있습니다. 위 '나중에 펌웨어 업데이트하기'의 espota 명령에서 `-f`에 제조사 파일을 줍니다. 화면이 안 나오거나 Wi-Fi에 못 붙으면 **시리얼**(위 esptool 명령에서 파일만 바꿈)로 합니다.
 
-- **Wi-Fi로**: 위 espota 명령에서 `-f`에 SD Pro 파일을 줍니다.
-- **시리얼로**: 위 esptool 명령에서 파일만 바꿉니다.
-
+- **A. Smart Weather Clock (SD Pro)**: [JUZIPi-tech/SD_PRO](https://github.com/JUZIPi-tech/SD_PRO)의 `SDPro_V1.0.x_….bin`.
+- **B. SmallTV-Ultra**: [GeekMagicClock/smalltv-ultra](https://github.com/GeekMagicClock/smalltv-ultra)에서 제조사 권장 판 폴더(지금 [Ultra-V9.0.50](https://github.com/GeekMagicClock/smalltv-ultra/tree/main/Ultra-V9.0.50))의 `FW-Smalltv-Ultra-V9.0.50.zip`을 받아 풀고, 안의 펌웨어 `.bin`을 올립니다. 판마다 바뀐 점은 같은 폴더의 `update_history.txt`에 있습니다. 되돌린 뒤 날씨·테마 설정은 제조사 설명서를 따릅니다.
 ## 참고
 
 - 화면 연결(실물로 확인): SCK GPIO14, MOSI GPIO13, DC GPIO0, RST GPIO2, CS 없음(SPI 모드 3), 백라이트 GPIO5(LOW일 때 켜짐). 화면이 케이스에 위아래가 뒤집혀 붙어 있어 펌웨어가 180° 돌려 그립니다.
