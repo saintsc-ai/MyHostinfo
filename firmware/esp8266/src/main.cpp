@@ -36,6 +36,7 @@
 #include <DNSServer.h>
 #include <ESP8266WiFiMulti.h>
 #include <ArduinoOTA.h>
+#include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <time.h>
 #include <EEPROM.h>
@@ -856,6 +857,33 @@ static void setView(int k, int slot, int page) {
   clockShown = wxShown = listShown = "";
 }
 
+// Wi-Fi 에 붙으면 주소를 15초 크게 보인다(2026-10-26 — SmallTV 는 버튼·시리얼이 없어 사용자가 주소를 찾기 어렵다).
+// 그동안 다른 화면은 그리지 않고, 끝나면 지금 화면을 처음부터 다시 그린다.
+static uint32_t ipHoldUntil = 0;
+static void showIp() {
+  String ip = WiFi.localIP().toString();
+  backlight(true);
+  tft.fillScreen(ST77XX_BLACK);
+  int y = topY;
+  tft.setTextSize(textSize);
+  text(padX, y, "Wi-Fi " + WiFi.SSID(), C_GREEN); y += lineH * 3 / 2;
+  int big = tft.width() >= 200 && ip.length() * 18 <= tft.width() - 2 * padX ? 3 : textSize;
+  tft.setTextSize(big);
+  text(padX, y, ip, C_YELLOW); y += 8 * big + lineH / 2;
+  tft.setTextSize(textSize);
+  text(padX, y, "http://" + ip, ST77XX_WHITE); y += lineH;
+  text(padX, y, devId + ".local", C_GRAY);
+  ipHoldUntil = (millis() + 15000) | 1;
+}
+static void endIpHold() {
+  ipHoldUntil = 0;
+  tft.fillScreen(ST77XX_BLACK);
+  for (auto &x : shown) x = "";
+  clockShown = wxShown = listShown = "";
+  vSeq = 0xFFFFFFFF;
+  if (vKind == V_NONE) draw(false);
+}
+
 static bool anyCandidate() {
   for (int i = 0; i < SLOTS; i++) if (candidate(i)) return true;
   return false;
@@ -1015,15 +1043,26 @@ void loop() {
     weatherTick();
     static bool wasUp = false;
     bool up = WiFi.status() == WL_CONNECTED;
-    if (up && !wasUp && vKind == V_NONE) {   // 붙었는데 아직 서버 값이 없으면 주소라도
-      field[0] = devId;
-      field[1] = WiFi.localIP().toString();
-      field[2] = "waiting for host";
-      for (int i = 3; i < LINES; i++) field[i] = "";
-      nFields = 3;
-      draw(false);
+    if (up && !wasUp) {
+      if (vKind == V_NONE) {   // 서버 값이 오기 전에는 주소를 남겨 둔다
+        field[0] = devId;
+        field[1] = WiFi.localIP().toString();
+        field[2] = "waiting for host";
+        for (int i = 3; i < LINES; i++) field[i] = "";
+        nFields = 3;
+      }
+      // 이름으로도 찾게: http://hostinfo-xxxxxx.local (맥·아이폰·윈도 10 이상)
+      static bool mdnsOn = false;
+      if (!mdnsOn && MDNS.begin(devId.c_str())) {
+#ifdef BOARD_SMALLTV
+        MDNS.addService("http", "tcp", 80);
+#endif
+        mdnsOn = true;
+      }
+      showIp();
     }
     wasUp = up;
+    if (up) MDNS.update();
   }
 #ifdef BOARD_SMALLTV
   portalTick();
@@ -1035,7 +1074,8 @@ void loop() {
   }
   uint32_t now = millis();
   static uint32_t lastTick = 0;
-  if (now - lastTick > 200) {
+  if (ipHoldUntil && (int32_t)(now - ipHoldUntil) >= 0) endIpHold();
+  if (!ipHoldUntil && now - lastTick > 200) {
     lastTick = now;
     schedule();
     render();

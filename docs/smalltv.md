@@ -61,14 +61,55 @@ GeekMagic **SmallTV**(Smart Weather Clock)는 ESP8266과 1.54" 화면이 들어�
 
 ---
 
-## 2. SmallTV를 원래 펌웨어로 Wi-Fi에 붙이기
+## 2. 원래 펌웨어 확인하고 Wi-Fi에 붙이기
 
-1. SmallTV에 전원을 넣습니다.
-2. 화면 안내대로 휴대폰을 SmallTV의 Wi-Fi에 붙여, 집이나 사무실 Wi-Fi를 설정합니다.
-3. 붙으면 화면에 SmallTV의 IP 주소(예: `192.168.0.23`)가 나옵니다. 적어 둡니다.
-4. PC 브라우저로 `http://<SmallTV 주소>`를 열면 **Smart Weather Clock** 설정 페이지가 나옵니다.
+SmallTV는 같은 겉모양이라도 **원래 펌웨어가 두 가지**입니다. 처음 켰을 때 화면과 Wi-Fi 이름으로 구분합니다. 안의 기판(ESP-12F)·화면·핀은 같아서 올릴 파일은 똑같고, 업데이트 메뉴만 다릅니다.
+
+| | **A. Smart Weather Clock (SD Pro)** | **B. SmallTV-Ultra** |
+|---|---|---|
+| 처음 켰을 때 Wi-Fi 이름 | `Smart Weather Clock` | `GIFTV` |
+| 처음 화면 | 연결 안내 → `SD Pro V1.0.x` | `Manual Online` QR, `WiFi: GIFTV`, `http://192.168.4.1` |
+| 설정 화면 | WiFi Settings · City Settings · Photo · GIF | 위쪽 메뉴 Network · Weather · Time · Pictures · Settings |
+| 펌웨어 올리는 곳 | **Firmware Update (OTA)** = `/update_ota`(파일 이름이 `SDP`로 시작해야 함) | **Settings → 7. Firmware update** = `/update` |
+
+![SmallTV-Ultra 기판 — ESP-12F(ESP8266), 두 종류 모두 같은 칩](images/ultra/6-board-esp12f.jpg)
+
+### A. Smart Weather Clock (SD Pro)
+
+1. 전원을 넣고, 휴대폰 Wi-Fi 목록에서 **`Smart Weather Clock`**에 붙습니다. '인터넷 없음' 경고가 나와도 그대로 붙어 있습니다.
+
+   <img src="images/sdpro/1-join-smart-weather-clock.png" width="240" alt="휴대폰 Wi-Fi 목록 — Smart Weather Clock">
+
+2. 설정 화면이 저절로 뜨지 않으면 휴대폰 데이터를 잠깐 끄고 브라우저로 `http://192.168.4.1`을 엽니다.
+3. **WIFI SETTINGS**의 목록에서 집 Wi-Fi를 고르고(없으면 Refresh List) 비밀번호를 넣고 **Connect**. SmallTV가 다시 켜집니다.
+
+   <img src="images/sdpro/2-wifi-settings.png" width="280" alt="WIFI SETTINGS — Select WiFi, Refresh List, Connect">
+
+4. 켜질 때 화면에 노란 글씨로 **IP 주소**(예: `192.168.0.125`)가 나옵니다. 적어 둡니다. PC 브라우저로 `http://<그 주소>`를 열면 설정 페이지가 나옵니다.
+
+   <img src="images/sdpro/3-ip-on-screen.png" width="220" alt="켜질 때 노란 IP 주소와 SD Pro V1.0.2">
+
+(Wi-Fi 설정·IP 화면 그림은 제품 설명서 *Smart Clock Manual V1.2.1*에서, Wi-Fi 목록 그림은 휴대폰 화면에 이름만 바꿔 넣은 예시입니다.)
+
+### B. SmallTV-Ultra
+
+제조사 안내(상자 QR 페이지): [GeekMagic SmallTV-Ultra 안내](https://qr61.cn/onQs0U/qlPEzlA) — 한국어 사용자 설명서([V9.0.30 PDF, AI 번역](https://ncstatic.clewm.net/rsrc/2025/0430/12/57ce98fdda436e684ed70e7d067fee37.pdf)), 영어 설명서([V9.0.30 PDF](https://ncstatic.clewm.net/rsrc/2025/0430/12/042f99ffc128618bcc9e38767c132966.pdf)), 원래 펌웨어([smalltv-ultra, 권장 V9.0.50](https://github.com/GeekMagicClock/smalltv-ultra/tree/main/Ultra-V9.0.50)). 원래 펌웨어의 날씨·시계 설정은 이 설명서를 보면 됩니다.
+
+1. 전원을 넣으면 화면에 `WiFi: GIFTV`, `http://192.168.4.1`이 나옵니다.
+
+   ![처음 켰을 때 — GIFTV, 192.168.4.1](images/ultra/1-first-boot.jpg)
+
+2. 휴대폰을 **`GIFTV`**(보안 없는 네트워크)에 붙입니다. 설정 화면이 저절로 뜨지 않으면 `http://192.168.4.1`을 엽니다.
+
+   <img src="images/ultra/2-join-giftv.png" width="240" alt="휴대폰 Wi-Fi 목록에서 GIFTV 에 붙은 모습">
+
+3. **Network** → Wi-Fi 이름·비밀번호 → **SAVE**. 붙으면 날씨 시계가 나오고, 켜질 때 새 IP 주소를 보여 줍니다. 적어 둡니다. (Ultra는 휴대폰을 `GIFTV`에 붙인 채 3절을 바로 해도 됩니다.)
+
+   <img src="images/ultra/3-wifi-page.png" width="240" alt="Network 메뉴 — Scan WiFi, 이름·비밀번호"> <img src="images/ultra/5-original-weather.jpg" width="320" alt="집 Wi-Fi 에 붙은 원래 펌웨어의 날씨 시계">
 
 ## 3. 펌웨어 바꾸기
+
+### A. Smart Weather Clock (SD Pro)
 
 1. 설정 페이지 아래쪽 **Firmware Update (OTA)**에서 파일 선택 → `SDP-hostinfo-smalltv.bin`을 고릅니다.
    - 원래 펌웨어는 이름이 `SDP`로 시작하는 파일만 받습니다. 이 파일은 이미 그렇게 지어 두었으니 이름을 바꾸지 않습니다.
@@ -82,6 +123,24 @@ curl -F "update=@SDP-hostinfo-smalltv.bin" http://<SmallTV 주소>/update_ota
 ```
 
 `OK`가 나오면 성공입니다.
+
+### B. SmallTV-Ultra
+
+1. 설정 화면 **Settings** 맨 아래 **7. Firmware update → UPLOAD**(= `http://<주소>/update`)에서 `SDP-hostinfo-smalltv.bin`을 고르고 **Update**. "Update Success! Rebooting..."이 나오면 끝입니다. 아래쪽 `Model: SmallTV-Ultra, Version: Ultra-V9.0.51`로 Ultra인 것을 한 번 더 확인할 수 있습니다(2026-10-26 이 판에서 확인).
+
+   <img src="images/ultra/4-update-menu.png" width="240" alt="Settings — 7. Firmware update UPLOAD, Model SmallTV-Ultra">
+
+   명령으로 할 때(집 Wi-Fi에 붙어 있으면):
+
+   ```sh
+   curl -F "firmware=@SDP-hostinfo-smalltv.bin" http://<SmallTV 주소>/update
+   ```
+
+2. 다시 켜지면 이 펌웨어의 설정 화면이 나옵니다(`Wi-Fi setup`, `join hostinfo-xxxxxx`, `open 192.168.4.1`). **원래 펌웨어에 넣은 Wi-Fi는 쓰지 않으니** 아래 4절대로 다시 넣습니다.
+
+   <img src="images/ultra/7-hostinfo-setup.jpg" width="320" alt="hostinfo 설정 화면 — join hostinfo-c905ef, open 192.168.4.1"> <img src="images/ultra/8-join-hostinfo.png" width="240" alt="휴대폰을 hostinfo-c905ef 에 붙인 모습"> <img src="images/ultra/9-saved.png" width="240" alt="저장하면 saved, restarting">
+
+원래 Ultra 펌웨어로 되돌리려면 GeekMagic GitHub([smalltv-ultra](https://github.com/GeekMagicClock/smalltv-ultra), 제조사 권장 [V9.0.50](https://github.com/GeekMagicClock/smalltv-ultra/tree/main/Ultra-V9.0.50))의 펌웨어를 아래 'OTA' 방법으로 올립니다.
 
 ## 4. SmallTV 설정 (휴대폰)
 
@@ -110,13 +169,21 @@ open 192.168.4.1
 
 4. **저장하고 다시 켜기**를 누릅니다.
 
-다시 켜지면 화면에 `hostinfo-xxxxxx`와 새 IP 주소가 잠깐 나오고, 몇 초 안에 서버 정보와 날씨가 나오기 시작합니다.
+다시 켜져 Wi-Fi에 붙으면 화면에 **새 IP 주소를 15초 동안 크게** 보입니다(`http://<주소>`, `hostinfo-xxxxxx.local`). 그 뒤 서버 정보와 날씨가 나오기 시작합니다.
+
+### SmallTV 주소 찾기
+
+설정을 바꾸거나 펌웨어를 올릴 때 SmallTV의 IP 주소가 필요합니다. 아래 중 편한 방법을 씁니다.
+
+1. **화면**: Wi-Fi에 붙을 때마다 주소를 15초 동안 보입니다. 지난 주소를 모르겠으면 전원을 뽑았다 꽂으면 됩니다.
+2. **이름으로**: 브라우저에 `http://hostinfo-xxxxxx.local`(`xxxxxx`는 화면·Wi-Fi 설정 때 본 6자리)을 넣습니다. 맥·아이폰·안드로이드 대부분·Windows 10 이상에서 됩니다. 기업용 무선(무선 컨트롤러 등)이나 일부 공유기는 이 이름 찾기(mDNS)를 막아 안 될 수 있습니다.
+3. **공유기 접속 기기 목록**: 이름 `hostinfo-xxxxxx`로 나옵니다(원래 펌웨어일 때는 `ESP-xxxxxx`).
 
 ### OTA 비밀번호를 PC에서 넣기
 
 OTA 비밀번호가 길어 휴대폰으로 넣기 번거로우면, 4번에서 비워 두고 SmallTV가 Wi-Fi에 붙은 뒤 PC에서 넣습니다. 비밀번호를 복사해 붙여 넣을 수 있어 편합니다.
 
-1. PC 브라우저로 `http://<SmallTV 새 주소>`를 엽니다. 주소는 SmallTV 화면이나 공유기의 접속 기기 목록에서 확인합니다(이름 `ESP-xxxxxx`).
+1. PC 브라우저로 `http://<SmallTV 새 주소>`를 엽니다. 주소는 위 'SmallTV 주소 찾기'를 봅니다.
 2. **OTA 비밀번호** 칸에만 비밀번호를 넣습니다. 다른 칸은 지금 값이 채워져 있으니 그대로 둡니다. Wi-Fi 비밀번호 칸은 비워 두면 예전 값을 그대로 씁니다.
 3. **저장하고 다시 켜기**를 누릅니다. 몇 초 뒤 다시 붙습니다.
 
